@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>28 de Septiembre — Para Mishell</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #070510;
+      --bg-nebula: #150b28;
+      --accent-pink: #ff5e9c;
+      --accent-gold: #ffd166;
+      --accent-violet: #9d4edd;
+      --glass-bg: rgba(20, 14, 38, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --text-main: #f8f5ff;
+      --text-muted: #c4b8db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, #241042 0%, var(--bg-deep) 60%),
+                  radial-gradient(circle at 80% 80%, #2b0f26 0%, var(--bg-deep) 70%);
+      color: var(--text-main);
+      font-family: 'Quicksand', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Fondo de estrellas animadas */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Contenedor de partículas flotantes */
+    #floating-hearts {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    /* Encabezado */
+    header {
+      text-align: center;
+      margin-bottom: 2.2rem;
+      animation: fadeDown 1s ease-out;
+    }
+
+    .date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 94, 156, 0.14);
+      border: 1px solid rgba(255, 94, 156, 0.35);
+      color: #ffb3d1;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(2rem, 5vw, 3.3rem);
+      background: linear-gradient(135deg, #ffffff 15%, #ffb3d1 55%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(255, 94, 156, 0.25);
+      margin-bottom: 0.4rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Grid principal */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.8rem;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Tarjetas con efecto cristal */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Sección del Video */
+    .video-card {
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(255, 94, 156, 0.22),
+                  0 20px 50px rgba(0, 0, 0, 0.65);
+      border-color: rgba(255, 94, 156, 0.35);
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #0c0818;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+      display: block;
+    }
+
+    /* Barra inferior del reproductor */
+    .player-controls {
+      margin-top: 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .song-info {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    /* Ecualizador visual */
+    .equalizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 22px;
+      width: 24px;
+    }
+
+    .equalizer span {
+      display: block;
+      width: 4px;
+      height: 6px;
+      background: linear-gradient(to top, var(--accent-pink), var(--accent-gold));
+      border-radius: 4px;
+      animation: eqBounce 0.8s ease-in-out infinite alternate;
+    }
+
+    .equalizer span:nth-child(2) { animation-delay: 0.2s; }
+    .equalizer span:nth-child(3) { animation-delay: 0.4s; }
+    .equalizer span:nth-child(4) { animation-delay: 0.15s; }
+
+    .song-title h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .song-title p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .actions-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .btn-magic,
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.15rem;
+      border-radius: 999px;
+      border: none;
+      color: #fff;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-magic {
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-violet));
+      box-shadow: 0 6px 20px rgba(255, 94, 156, 0.35);
+    }
+
+    .btn-magic:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 94, 156, 0.5);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    /* Dedicatoria corta debajo del video */
+    .dedication-note {
+      margin-top: 1.2rem;
+      padding: 1rem 1.2rem;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border-left: 3px solid var(--accent-pink);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #e6dcf7;
+    }
+
+    /* Sección de Letras */
+    .lyrics-card {
+      display: flex;
+      flex-direction: column;
+      max-height: 620px;
+    }
+
+    .lyrics-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.9rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lyrics-header h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffb3d1;
+      letter-spacing: 0.04em;
+    }
+
+    .lyrics-scroll {
+      overflow-y: auto;
+      padding-right: 0.6rem;
+      line-height: 1.75;
+      font-size: 0.98rem;
+      color: #dfd6f2;
+    }
+
+    /* Scrollbar estilizado */
+    .lyrics-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .lyrics-scroll::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+    }
+    .lyrics-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 94, 156, 0.4);
+      border-radius: 10px;
+    }
+
+    .verse-block {
+      margin-bottom: 1.4rem;
+      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .verse-block:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateX(4px);
+    }
+
+    .verse-block.chorus {
+      background: linear-gradient(135deg, rgba(255, 94, 156, 0.12), rgba(157, 78, 221, 0.12));
+      border: 1px solid rgba(255, 94, 156, 0.25);
+    }
+
+    .verse-tag {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-gold);
+      margin-bottom: 0.35rem;
+      font-weight: 700;
+    }
+
+    /* Animaciones */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes eqBounce {
+      0% { height: 5px; }
+      100% { height: 22px; }
+    }
+
+    .floating-particle {
+      position: absolute;
+      bottom: -30px;
+      font-size: 1.2rem;
+      opacity: 0;
+      animation: riseUp 5s linear forwards;
+    }
+
+    @keyframes riseUp {
+      0% {
+        transform: translateY(0) scale(0.7) rotate(0deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.85;
+      }
+      85% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-105vh) scale(1.2) rotate(25deg);
+        opacity: 0;
+      }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="starfield"></canvas>
+  <div id="floating-hearts"></div>
+
+  <div class="container">
+    <header>
+      <div class="date-badge">🌷 28 de Septiembre • 10:30 PM ✨</div>
+      <h1>Nuestra Canción, Mishell</h1>
+      <p class="subtitle">Cada acorde y cada dibujo cuenta cómo llegaste sin avisar y te volviste mi lugar favorito.</p>
+    </header>
+
+    <main class="main-grid">
+      <!-- Columna Izquierda: Reproductor de Video integrado -->
+      <section class="glass-card video-card" id="videoCard">
+        <div class="video-wrapper">
+          <!-- Reemplaza "video/videomusic.mp4" por tu archivo comprimido (<25 MB) o por tu URL directa .mp4 -->
+          <video
+            id="musicVideo"
+            controls
+            playsinline
+            preload="metadata"
+            src="video/videomusic.mp4">
+          </video>
+        </div>
+
+        <div class="player-controls">
+          <div class="song-info">
+            <div class="equalizer" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="song-title">
+              <h2>TE AMO, Mi niña de hermosos ojitos</h2>
+              <p>Para Mishell • Ed. Especial</p>
+            </div>
+          </div>
+
+          <div class="actions-group">
+            <label class="btn-secondary" for="localVideoInput">
+              <span>🎬 Probar .mp4</span>
+              <input type="file" id="localVideoInput" accept="video/mp4,video/*" hidden />
+            </label>
+            <button class="btn-magic" id="burstBtn" type="button">
+              <span>🌷 Enviar tulipanes</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="dedication-note">
+          “Aunque falte el título, yo ya estoy en tu trinchera. Mishell, contigo quiero estar la vida entera.” 💛
+        </div>
+      </section>
+
+      <!-- Columna Derecha: Letra de la Canción -->
+      <aside class="glass-card lyrics-card">
+        <div class="lyrics-header">
+          <h3>📜 Letra de la canción</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Desliza para leer</span>
+        </div>
+
+        <div class="lyrics-scroll">
+          <div class="verse-block">
+            <span class="verse-tag">Intro</span>
+            Uoh-oh, oh-oh...<br>
+            Mishell...<br>
+            Si amar así es una guerra, yo ya me alisté...
+          </div>
+
+          <div class="verse-block">
+            <span class="verse-tag">Verso 1</span>
+            Al principio eras solo alguien nueva en el lugar,<br>
+            un saludo formal, nada más para pensar.<br>
+            Yo no quería caer, tenía el pecho bien cerrado,<br>
+            pero en una semana ya me tenías atrapado.<br>
+            Tu voz, tu forma de hablar, tu pelo y tu estatura,<br>
+            cada charla fue rompiendo lo que hacía mi armadura.
+          </div>
+
+          <div class="verse-block">
+            <span class="verse-tag">Pre-Coro</span>
+            Ya no podía entrar y verte sin sentir el corazón<br>
+            golpeando fuerte en el pecho, pidiendo tu atención.<br>
+            Me dijiste "por ahora no, veamos con el tiempo",<br>
+            me dolió, pero igual me quedé en el intento,<br>
+            con unas flores en mano, algo que yo casi no hacía,<br>
+            y ver tu sonrisa fue mi mejor melodía.
+          </div>
+
+          <div class="verse-block chorus">
+            <span class="verse-tag">Coro</span>
+            Porque tus ojos tienen un brillo que me hipnotiza,<br>
+            me quedo en tu aroma y me rindo ante tu risa.<br>
+            El 28 de septiembre a las diez y media de la noche,<br>
+            un beso encendió la chispa sin pedir ningún reproche.<br>
+            Aún no somos enamorados, pero yo ya te amo así,<br>
+            y aunque me dé miedo perderte, no me voy de aquí.<br>
+            Si a veces siento celos, es por querer cuidarte más,<br>
+            porque ya sé que existes y no te suelto jamás.
+          </div>
+
+          <div class="verse-block">
+            <span class="verse-tag">Verso 2</span>
+            Sé que a veces te pesa el día, las clases y la presión,<br>
+            ese estrés que te cansa y te aprieta el corazón.<br>
+            En el trabajo te saco risas y a veces un buen enojo,<br>
+            buscando aliviar el peso que te nubla los ojos.<br>
+            Salimos a escondidas, cuidando cada paso,<br>
+            porque si alguien nos ve, llega el castigo y el retraso.
+          </div>
+
+          <div class="verse-block">
+            <span class="verse-tag">Puente</span>
+            Hubo días de dudas, de querer tomar distancia,<br>
+            cuando todo iba aprisa y faltaba constancia.<br>
+            Yo aguanté el nudo, seguí presente a tu lado,<br>
+            con detalles sinceros, despacio y con cuidado.<br>
+            No importa lo que cueste, yo quiero ser tu abrigo,<br>
+            el que te da la mano y camina contigo.
+          </div>
+
+          <div class="verse-block chorus">
+            <span class="verse-tag">Coro Final</span>
+            Porque tus ojos tienen un brillo que me hipnotiza,<br>
+            me quedo en tu aroma y me rindo ante tu risa.<br>
+            El 28 de septiembre a las diez y media de la noche,<br>
+            un beso encendió la chispa sin pedir ningún reproche.<br>
+            Aún no somos enamorados, pero yo ya te amo así,<br>
+            y aunque me dé miedo perderte, no me voy de aquí.<br>
+            Si a veces siento celos, es por querer cuidarte más,<br>
+            porque ya sé que existes y no te suelto jamás.
+          </div>
+
+          <div class="verse-block">
+            <span class="verse-tag">Outro</span>
+            Un "te quiero mucho" con un corazoncito,<br>
+            me basta para seguir queriéndote despacito.<br>
+            Aunque falte el título, yo ya estoy en tu trinchera,<br>
+            Mishell, contigo quiero estar la vida entera.<br>
+            Uoh-oh, oh-oh...<br>
+            Contigo, Mishell.
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      Hecho con cariño para ti • 🌷✨
+    </footer>
+  </div>
+
+  <script>
+    // 1. Campo de estrellas en Canvas
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: 130 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.6 + 0.3,
+        alpha: Math.random(),
+        speed: Math.random() * 0.015 + 0.005
+      }));
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => {
+        s.alpha += s.speed;
+        if (s.alpha > 1 || s.alpha < 0.15) s.speed *= -1;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 240, 250, ${s.alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(animateStars);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animateStars();
+
+    // 2. Partículas flotantes continuas + botón interactivo de tulipanes
+    const heartsContainer = document.getElementById('floating-hearts');
+    const burstBtn = document.getElementById('burstBtn');
+    const localVideoInput = document.getElementById('localVideoInput');
+    const musicVideo = document.getElementById('musicVideo');
+
+    function spawnParticle() {
+      const icons = ['💖', '🌷', '✨', '🎶', '🤍'];
+      const el = document.createElement('span');
+      el.className = 'floating-particle';
+      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+      el.style.left = Math.random() * 95 + 'vw';
+      el.style.animationDuration = (Math.random() * 2.5 + 4) + 's';
+      heartsContainer.appendChild(el);
+      setTimeout(() => el.remove(), 6500);
+    }
+
+    setInterval(spawnParticle, 1100);
+
+    burstBtn.addEventListener('click', () => {
+      for (let i = 0; i < 14; i++) {
+        setTimeout(spawnParticle, i * 80);
+      }
+    });
+
+    localVideoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      musicVideo.src = url;
+      musicVideo.play().catch(() => {});
+    });
+  </script>
+</body>
+</html>
